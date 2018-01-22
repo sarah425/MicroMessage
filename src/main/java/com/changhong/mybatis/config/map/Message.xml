@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.changhong.mybatis.dao.IMessage">
+
+	<resultMap type="com.changhong.mybatis.entity.Message" id="MessageResult">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="command" jdbcType="VARCHAR" property="command" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="content" jdbcType="VARCHAR" property="content" />
+	</resultMap>
+
+	<select id="findList" parameterType="java.util.Map" resultMap="MessageResult"> 
+		SELECT <include refid="columns"/> FROM message 
+		<where> 
+		  <if test="message.command != null and !&quot;&quot;.equals(message.command.trim())"> 
+		      and command=#{message.command} 
+		  </if> 
+		  <if test="message.description != null and !&quot;&quot;.equals(message.description.trim())"> 
+		      and description like '%' #{message.description} '%' 
+		  </if> 
+		</where> 
+		  order by id 
+	</select>
+
+
+	<select id="findPage" parameterType="java.util.Map" resultMap="MessageResult">
+		SELECT
+		<include refid="columns" />
+		FROM message
+
+		<where>
+			<if
+				test="message.command != null and !&quot;&quot;.equals(message.command.trim())">
+				and command=#{message.command}
+			</if>
+			<if
+				test="message.description != null and !&quot;&quot;.equals(message.description.trim())">
+				and description like '%' #{message.description} '%'
+			</if>
+		</where>
+		order by id limit #{page.dbIndex},#{page.size}
+	</select>
+
+	<select id="count" parameterType="com.changhong.mybatis.entity.Message" resultType="int">
+		select count(*) FROM message
+		<where>
+			<if test="command != null and !&quot;&quot;.equals(command.trim())">
+				and command=#{command}
+			</if>
+			<if
+				test="description != null and !&quot;&quot;.equals(description.trim())">
+				and description like '%' #{description} '%'
+			</if>
+		</where>
+	</select>
+
+	<sql id="columns">id,command,description,content</sql>
+
+	<delete id="deleteOne" parameterType="int">
+		delete from message where id=#{_parameter}
+	</delete>
+
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from message where id in (
+
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+
+	</delete>
+
+
+</mapper>

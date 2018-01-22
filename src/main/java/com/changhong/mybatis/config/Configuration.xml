@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<plugins>
+		<plugin interceptor="com.changhong.mybatis.interceptor.PageInterceptor"></plugin>
+	</plugins>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC">
+				<property name="" value="" />
+			</transactionManager>
+			<dataSource type="UNPOOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url"
+					value="jdbc:mysql://localhost:3306/test?characterEncoding=utf8" />
+				<property name="username" value="root" />
+				<property name="password" value="1991sarah" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="com/changhong/mybatis/config/map/Message.xml" />
+		<mapper resource="com/changhong/mybatis/config/map/Command.xml" />
+		<mapper resource="com/changhong/mybatis/config/map/CommandContent.xml" />
+	</mappers>
+
+
+</configuration>
